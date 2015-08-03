@@ -131,11 +131,35 @@ END
 
   it 'handles a text argument with existing hash' do
     input = <<END
+  span.foo 'bar', 'data-baz' => 'booz'
+END
+
+    output = code = <<END
+  span 'bar', class: 'foo', 'data-baz' => 'booz'
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  it 'handles a dynamic text argument' do
+    input = <<END
   span.foo x, 'data-baz' => 'booz'
 END
 
     output = code = <<END
   span x, class: 'foo', 'data-baz' => 'booz'
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  it 'handles a complex dynamic text argument' do
+    input = <<END
+  span.foo x.z.y(yeah: 'man'), 'data-baz' => 'booz'
+END
+
+    output = code = <<END
+  span x.z.y(yeah: 'man'), class: 'foo', 'data-baz' => 'booz'
 END
 
     expect(described_class.convert(input)).to eq output
