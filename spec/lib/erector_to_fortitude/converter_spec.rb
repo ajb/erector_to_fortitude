@@ -116,4 +116,44 @@ END
 
     expect(described_class.convert(input)).to eq output
   end
+
+  it 'handles a text argument' do
+    input = <<END
+  span.foo 'Bar'
+END
+
+    output = code = <<END
+  span 'Bar', class: 'foo'
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  it 'handles a text argument with existing hash' do
+    input = <<END
+  span.foo x, 'data-baz' => 'booz'
+END
+
+    output = code = <<END
+  span x, class: 'foo', 'data-baz' => 'booz'
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  it 'handles a text argument inside another node' do
+    input = <<END
+  div.bar {
+    span.foo x
+  }
+END
+
+    output = code = <<END
+  div(class: 'bar') {
+    span x, class: 'foo'
+  }
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
 end

@@ -46,8 +46,12 @@ module ErectorToFortitude
         replace child.loc.selector, ''
       end
 
+      if (text_node = get_node_after_classes_and_ids(node)) && text_node.is_a?(Parser::AST::Node) && text_node.type != :hash
+
+        insert_after text_node.loc.expression, ', ' + new_opt_str
+
       # Add class to existing hash
-      if node.children[2] && node.children[2].type == :hash
+      elsif node.children[2] && node.children[2].type == :hash
         insert_before node.children[2].children[0].loc.expression, new_opt_str + ', '
 
       # Add a new options hash
@@ -85,6 +89,20 @@ module ErectorToFortitude
       end
 
       arr.reverse
+    end
+
+    def get_node_after_classes_and_ids(node)
+      found_classes_and_ids = false
+
+      node.children.each do |child|
+        if child.is_a?(Symbol)
+          found_classes_and_ids = true
+        end
+
+        if found_classes_and_ids && !child.is_a?(Symbol)
+          return child
+        end
+      end
     end
   end
 end
