@@ -17,6 +17,22 @@ END
     expect(described_class.convert(input)).to eq output
   end
 
+  it 'converts multiple classes' do
+    input = <<END
+  div.foo.bar.baz {
+    text 'hi'
+  }
+END
+
+    output = code = <<END
+  div(class: 'foo bar baz') {
+    text 'hi'
+  }
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
   it 'converts on non-div tags' do
     input = <<END
   span.foo {
@@ -78,6 +94,22 @@ END
 
     output = code = <<END
   div(class: 'foo', 'data-bar' => 'baz') {
+    text 'hi'
+  }
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  it 'handles complex existing hash options' do
+    input = <<END
+  div.foo.bar.baz.booz!('data-bar' => 'baz') {
+    text 'hi'
+  }
+END
+
+    output = code = <<END
+  div(class: 'foo bar baz', id: 'booz', 'data-bar' => 'baz') {
     text 'hi'
   }
 END
