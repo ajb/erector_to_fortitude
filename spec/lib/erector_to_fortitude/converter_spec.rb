@@ -9,7 +9,7 @@ RSpec.describe ErectorToFortitude::Converter do
 END
 
     output = code = <<END
-  div(class: "foo") {
+  div(class: 'foo') {
     text 'hi'
   }
 END
@@ -25,7 +25,7 @@ END
 END
 
     output = code = <<END
-  span(class: "foo") {
+  span(class: 'foo') {
     text 'hi'
   }
 END
@@ -61,7 +61,7 @@ END
 END
 
     output = code = <<END
-  div(id: "foo") {
+  div(id: 'foo') {
     text 'hi'
   }
 END
@@ -77,7 +77,7 @@ END
 END
 
     output = code = <<END
-  div(class: "foo", 'data-bar' => 'baz') {
+  div(class: 'foo', 'data-bar' => 'baz') {
     text 'hi'
   }
 END

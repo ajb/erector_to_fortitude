@@ -12,9 +12,9 @@ module ErectorToFortitude
         is_id = node.children[1].to_s[-1] == '!'
         id_or_class_name = node.children[1].to_s.sub(/\!$/, '')
         new_pair = if is_id
-                     %{id: "#{id_or_class_name}"}
+                     %{id: '#{id_or_class_name}'}
                    else
-                     %{class: "#{id_or_class_name}"}
+                     %{class: '#{id_or_class_name}'}
                    end
 
         # Add class to existing hash
