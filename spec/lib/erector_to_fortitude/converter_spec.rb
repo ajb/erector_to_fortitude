@@ -180,4 +180,53 @@ END
 
     expect(described_class.convert(input)).to eq output
   end
+
+  it 'handles empty tags' do
+    input = <<END
+  div.bar
+END
+
+    output = code = <<END
+  div(class: 'bar')
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  it 'handles code within an inline widget' do
+    input = <<END
+  Erector.inline {
+    div.foo 'bar'
+  }
+END
+
+    output = code = <<END
+  Erector.inline {
+    div 'bar', class: 'foo'
+  }
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
+
+  # known issue
+  xit 'handles code inside proc values' do
+    input = <<END
+bar({
+  proc: -> {
+    a.button.primary 'hi'
+  }
+})
+END
+
+  output = code = <<END
+bar({
+  proc: -> {
+    a 'hi', class: 'button primary'
+  }
+})
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
 end
