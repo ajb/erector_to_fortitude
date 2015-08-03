@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.files = `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {features,spec}/*`.split("\n")
+  s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.homepage = 'http://github.com/ajb/erector_to_fortitude'
 
   s.add_dependency 'parser'
