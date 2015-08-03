@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+here = File.expand_path(File.dirname(__FILE__))
+
+if File.directory?("#{here}/../lib/erector_to_fortitude")
+  $:.unshift "#{here}/../lib"
+end
+
+require 'erector_to_fortitude'
+
+filepaths = []
+
+ARGV.each do |arg|
+  if arg[-1] == '/'
+    Dir["#{arg}/**/*.rb"].each do |file|
+      filepaths << file
+    end
+  elsif File.exist?(arg)
+    filepaths << arg
+  else
+    puts "Didn't know how to parse the argument \"#{arg}\""
+  end
+end
+
+puts "Converting #{filepaths.length} files"
+
+filepaths.each do |fp|
+  puts "Converting #{fp}..."
+  new_code = ErectorToFortitude::Converter.convert(File.read(fp))
+  File.open(fp, 'w') { |f| f.write(new_code) }
+end
+
+puts 'Done!'
