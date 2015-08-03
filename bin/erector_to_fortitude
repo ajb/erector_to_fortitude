@@ -11,7 +11,8 @@ require 'erector_to_fortitude'
 filepaths = []
 
 ARGV.each do |arg|
-  if arg[-1] == '/'
+  if File.directory?(arg)
+    arg = arg.gsub(/\/$/, '')
     Dir["#{arg}/**/*.rb"].each do |file|
       filepaths << file
     end
