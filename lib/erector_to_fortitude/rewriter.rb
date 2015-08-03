@@ -1,3 +1,5 @@
+require 'pry'
+
 module ErectorToFortitude
   class Rewriter < Parser::Rewriter
     def on_send(node)
@@ -7,16 +9,26 @@ module ErectorToFortitude
          node.children[0].children[0] == nil &&
          node.children[0].children[1] == :div
 
-        # Remove the dot
-        replace node.loc.dot, ''
+        is_id = node.children[1].to_s[-1] == '!'
+        id_or_class_name = node.children[1].to_s.sub(/\!$/, '')
+        new_pair = if is_id
+                     %{id: "#{id_or_class_name}"}
+                   else
+                     %{class: "#{id_or_class_name}"}
+                   end
 
-        if node.children[1].to_s[-1] == '!'
-          new_code = '(id: "' + node.children[1].to_s[0..-2] + '")'
+        # Add class to existing hash
+        if node.children[2] && node.children[2].type == :hash
+          replace node.loc.dot, ''
+          replace node.loc.selector, ''
+
+          insert_before node.children[2].children[0].loc.expression, new_pair + ', '
+        # Add a new options hash
         else
-          new_code = '(class: "' + node.children[1].to_s + '")'
+          # Remove the dot
+          replace node.loc.dot, ''
+          replace node.loc.selector, "(#{new_pair})"
         end
-
-        replace node.loc.selector, new_code
       end
     end
   end

@@ -40,4 +40,24 @@ END
 
     expect(described_class.convert(input)).to eq output
   end
+
+  it 'handles existing hash options' do
+    input = <<END
+def content
+  div.foo('data-bar' => 'baz') {
+    text 'hi'
+  }
+end
+END
+
+    output = code = <<END
+def content
+  div(class: "foo", 'data-bar' => 'baz') {
+    text 'hi'
+  }
+end
+END
+
+    expect(described_class.convert(input)).to eq output
+  end
 end

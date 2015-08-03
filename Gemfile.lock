@@ -62,4 +62,5 @@ DEPENDENCIES
   guard
   guard-rspec
   parser
+  pry
   rspec
