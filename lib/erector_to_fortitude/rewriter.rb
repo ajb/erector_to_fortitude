@@ -7,7 +7,7 @@ module ErectorToFortitude
          node.children[0] &&
          node.children[0].type == :send &&
          node.children[0].children[0] == nil &&
-         node.children[0].children[1] == :div
+         ErectorToFortitude::HTML_TAGS.include?(node.children[0].children[1].to_s)
 
         is_id = node.children[1].to_s[-1] == '!'
         id_or_class_name = node.children[1].to_s.sub(/\!$/, '')
